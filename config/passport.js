@@ -3,12 +3,25 @@ var localStrategies = require('passport-local');
 
 var User = require('../models/User');
 
-//serialize
-//Deserialize
+passport.serializeUser(function(user, done) {
+  console.log(user);
+  done(null, user._id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
 
 
 passport.use(new localStrategies({usernameField: 'email'},function(email, password, done){
-  User.findOne({email: req.body.email}, function(err, user){
+  User.findOne({email: email}, function(err, user){
+    if(err)
+      return err;
+    console.log('user.password');
+    console.log(user.password);
+    console.log(password);
     if(user.password==password)
     {
       return done(null,user);

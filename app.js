@@ -25,6 +25,7 @@ mongoose.connection.on('sucess',function(){
 app.set('views',__dirname+"/views");
 app.set('view engine','jade');
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser());
 app.use(express.static(__dirname+'/public'));
 app.use(session({
@@ -38,6 +39,10 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(function(req, res, next){
+  res.locals.user= req.user;
+  next();
+});
 //Routes
 app.get('/',homeController.index);
 app.get('/blog',blogController.index);
@@ -50,6 +55,9 @@ app.post('/add',blogController.postAddBlog);
 
 app.get('/login', userController.getLogin);
 app.post('/login', userController.postLogin);
+app.get('/signup', userController.getSignUp);
+app.post('/signup', userController.postSignUp);
+app.get('/logout', userController.getLogout);
 app.listen('3000', function(){
   console.log("Server at port 3000");
 });

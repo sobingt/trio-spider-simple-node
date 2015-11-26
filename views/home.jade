@@ -1,7 +1,10 @@
 extends layout
 
 block content
-  h1 Hello World
+  if user
+    h1 Hello #{user.email}
+  else
+    h1 Hello World
   each category in categories
     a(style="margin-right: 7px;" href="?category=#{category}")
       | #{category}
@@ -15,3 +18,7 @@ block content
   
   a(style="display:block;" href="/add")
     | Add
+  if(!user)
+    a(style="display:block;" href="/login")
+      | login
+  
