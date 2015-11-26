@@ -186,7 +186,7 @@ function getCategoryOfAuthor(authorBlogs,author){
   {
     for(var j=0; j< tempArray.length; j++)
     {
-      if(authorBlogs[i].category==tempArray[j].category)
+      if(authorBlogs[i].category==tempArray[j])
         found = true;
     }
     if(!found)
