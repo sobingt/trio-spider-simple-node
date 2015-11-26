@@ -1,5 +1,5 @@
 var authors =["sobin","prath","darshan","surya"];
-var blogData = require('../models/Blog');
+var blogData = require('../models/BlogStatic');
 var blogs = blogData.blogs;
 var categories =blogData.categories(blogs);
 
