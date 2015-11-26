@@ -22,11 +22,12 @@ passport.use(new localStrategies({usernameField: 'email'},function(email, passwo
     console.log('user.password');
     console.log(user.password);
     console.log(password);
-    if(user.password==password)
-    {
-      return done(null,user);
-    }
-    else
-      return done(null,false,{message: "Invalid password and email"});
+    user.comparePassword(password, function(err, isMatch){
+      if(isMatch)
+        return done(null,user);
+      else
+        return done(null,false,{message: "Invalid password and email"});
+    });
+      
   });
 }))
