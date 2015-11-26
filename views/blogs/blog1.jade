@@ -2,5 +2,8 @@ extends ../bloglayout
 
 block content
   h1= blog.header
-  p=blog.data
-  a(href="/blog/#{id}/remove") Remove
+  p= blog.data
+  a(href="/blog/#{blog._id}/remove") Remove 
+  | &nbsp;
+  a(href="/blog/#{blog._id}/edit") Edit
+  | &nbsp;

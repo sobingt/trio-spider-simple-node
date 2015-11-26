@@ -1,47 +1,92 @@
-var authors =["sobin","prath","darshan","surya"];
-var blogData = require('../models/BlogStatic');
-var blogs = blogData.blogs;
-var categories =blogData.categories(blogs);
+var Blog = require('../models/Blog'); 
 
 exports.index = function(req, res){
  if(req.query.author)
   {
-    var tempBlogs = getBlogByAuthor(blogs,req.query.author);
-    var tempCategory =getCategoryOfAuthor(tempBlogs,req.query.author);
-    res.render('home', {
-              blogs: tempBlogs,
-              authors: authors,
-              categories: tempCategory
-            });
+    
+     Blog.find({author: req.query.author},function(err, blogs){
+      if(err)
+        return err;
+      var authors =[];
+      var categories =[];
+      res.render('home', {
+                  blogs: blogs,
+                  authors: authors,
+                  categories: categories
+                });
+      });
   }
   else if(req.query.category)
   {
-    var tempBlogs =getBlogByCategory(blogs,req.query.category)
+     Blog.find({category: req.query.category},function(err, blogs){
+      if(err)
+        return err;
+      var authors =[];
+      var categories =[];
       res.render('home', {
-              blogs: tempBlogs,
-              authors: authors,
-              categories: categories
-            });
+                  blogs: blogs,
+                  authors: authors,
+                  categories: categories
+                });
+      });
   }
   else
-    res.render('home', {
-                blogs: blogs,
-                authors: authors,
-                categories: categories
-              });
+  {
+    Blog.find({},function(err, blogs){
+      if(err)
+        return err;
+      var authors =[];
+      var categories =[];
+      res.render('home', {
+                  blogs: blogs,
+                  authors: authors,
+                  categories: categories
+                });      
+    });
+    
+  }
+
 };
 
 
 exports.singleBlog = function(req, res){
-  res.render('blogs/blog1',{
-    blog: blogs[req.params.id],
-    id: req.params.id
+  Blog.findById(req.params.id,function(err, blog){
+    if(err)
+      return err;
+    res.render('blogs/blog1',{
+      blog: blog,
+      id: req.params.id
+    });
   });
-};
 
+};
+exports.getEditBlog = function(req, res){
+  Blog.findById(req.params.id,function(err, blog){
+    if(err)
+      return err;
+    res.render('editBlog',{
+      blog: blog
+    });
+  });
+
+};
+exports.postEditBlog = function(req, res){
+  Blog.findById(req.body.id,function(err, blog){
+    if(err)
+      return err;
+    blog.title = req.body.title;
+    blog.header = req.body.header;
+    blog.data = req.body.data;
+    blog.link = req.body.link;
+    blog.save();
+    res.redirect("/blog/"+blog._id);
+  });
+
+};
 exports.removeBlog = function(req, res){
-  blogs.splice(req.params.id, 1);
-  res.redirect('/');
+  Blog.findById(req.params.id).remove(function(){
+    res.redirect('/');
+  });
 };
 
 exports.getAddBlog =function(req, res){
@@ -49,46 +94,13 @@ exports.getAddBlog =function(req, res){
 };
 
 exports.postAddBlog = function(req, res){
-  blogs.push({
+  var blog = new Blog({
     header: req.body.header,
     title: req.body.title,
     data: req.body.data,
     link: req.body.link
   });
-  res.send(blogs);
+  blog.save(function(err, blog){
+    res.redirect('/');
+  });
 };
-
-function getBlogByAuthor(blogs,author){
-  var tempArray = [];
-  for(var i=0; i< blogs.length; i++)
-  {
-    if(blogs[i].author==author)
-      tempArray.push(blogs[i]);
-  }
-  return tempArray;
-}
-
-function getBlogByCategory(blogs,category){
-  var tempArray = [];
-  for(var i=0; i< blogs.length; i++)
-  {
-    if(blogs[i].category==category)
-      tempArray.push(blogs[i]);
-  }
-  return tempArray;
-}
-function getCategoryOfAuthor(authorBlogs,author){
-  var tempArray = [];
-  var found = false;
-  for(var i=0; i< authorBlogs.length; i++)
-  {
-    for(var j=0; j< tempArray.length; j++)
-    {
-      if(authorBlogs[i].category==tempArray[j])
-        found = true;
-    }
-    if(!found)
-      tempArray.push(authorBlogs[i].category);
-  }
-  return tempArray;
-}

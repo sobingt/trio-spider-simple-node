@@ -6,7 +6,7 @@ block content
     a(style="margin-right: 7px;" href="?category=#{category}")
       | #{category}
   each blog in blogs
-    a(style="display:block;" href="/blog/#{$index}")
+    a(style="display:block;" href="/blog/#{blog._id}")
       | #{blog.header}
   br
   each author in authors

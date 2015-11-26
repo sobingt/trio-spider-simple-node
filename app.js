@@ -23,6 +23,8 @@ app.get('/',homeController.index);
 app.get('/blog',blogController.index);
 app.get('/blog/:id',blogController.singleBlog);
 app.get('/blog/:id/remove',blogController.removeBlog);
+app.get('/blog/:id/edit',blogController.getEditBlog);
+app.post('/blog/:id/edit',blogController.postEditBlog);
 app.get('/add',blogController.getAddBlog);
 app.post('/add',blogController.postAddBlog);
 
