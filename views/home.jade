@@ -2,9 +2,16 @@ extends layout
 
 block content
   h1 Hello World
+  each category in categories
+    a(style="margin-right: 7px;" href="?category=#{category}")
+      | #{category}
   each blog in blogs
     a(style="display:block;" href="/blog/#{$index}")
       | #{blog.header}
   br
+  each author in authors
+    a(style="margin-right: 7px;" href="?author=#{author}")
+      | #{author}
+  
   a(style="display:block;" href="/add")
     | Add
