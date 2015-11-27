@@ -14,6 +14,8 @@ var app = express();
 var homeController = require('./controllers/home');
 var blogController = require('./controllers/blog');
 var userController = require('./controllers/user');
+var bitGoController = require('./controllers/bitgo');
+var crawlController = require('./controllers/crawl');
 
 mongoose.connect("mongodb://localhost:27017/blog");
 mongoose.connection.on('error',function(){
@@ -62,6 +64,10 @@ app.get('/logout', userController.getLogout);
 app.get('/auth/facebook',  passport.authenticate('facebook',{ scope:['email','user_location']}));
 app.get('/auth/facebook/callback', passport.authenticate('facebook',{ failureRedirect: '/login'}), function(req, res){res.redirect('/')});
 
+app.get('/bitgo', bitGoController.getBitGo);
+app.get('/crawl', crawlController.index);
+app.get('/food', crawlController.foodCrawl);
 app.listen('3000', function(){
   console.log("Server at port 3000");
 });
+
