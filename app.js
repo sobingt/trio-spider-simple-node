@@ -58,6 +58,10 @@ app.post('/login', userController.postLogin);
 app.get('/signup', userController.getSignUp);
 app.post('/signup', userController.postSignUp);
 app.get('/logout', userController.getLogout);
+
+app.get('/auth/facebook',  passport.authenticate('facebook',{ scope:['email','user_location']}));
+app.get('/auth/facebook/callback', passport.authenticate('facebook',{ failureRedirect: '/login'}), function(req, res){res.redirect('/')});
+
 app.listen('3000', function(){
   console.log("Server at port 3000");
 });

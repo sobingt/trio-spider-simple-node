@@ -48,4 +48,14 @@ exports.postSignUp = function(req, res, next){
 exports.getLogout = function(req, res, next){
   req.logout();
   res.redirect('/');
-}
+};
+
+exports.facebookAuth = function(req, res, next){
+  passport.authenticate('facebook',{ scope:['email','user_location']});
+};
+
+exports.facebookAuthCallback = function(req, res, next){
+  passport.authenticate('facebook',{ failureRedirect: '/login'});
+  res.redirect('/');
+};
+
