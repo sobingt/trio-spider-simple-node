@@ -7,7 +7,10 @@ var userSchema = new mongoose.Schema({
   password: String,
   name: String,
   phone:[String],
-  gender:{type: String, enum:["Male","Female","Third"]}
+  gender:{type: String, enum:["Male","Female","Third"]},
+  facebook: String, //facebook ID
+  google: String,
+  token : Array
 });
 
 userSchema.pre('save', function(next){
